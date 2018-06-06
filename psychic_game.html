@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Psychic Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+</head>
+<body>
+    <div class="wrapper">
+        <div class="col-md-3">
+        </div>
+          <div class="col-md-6 text-center">
+            <header>
+            <h1>Are You A Psychic</h1>
+            </header>
+            <div class="instructions">
+              <h3>Can you guess what letter the computer is thinking of? (Guess a-z)</h3>
+              <br>
+            </div>
+        <!--Empty Divs/scores-->
+            <div id="game">
+              <ul class="list-group">
+                <li class="list-group-item"><p id="win">Wins: </p></li>
+                <li class="list-group-item"><p id="loss">Losses: </p></li>
+                <li class="list-group-item"><p id="guessLeft">Guesses Left: </p></li>
+                <li class="list-group-item"><p id="yourGuesses">Your Guesses: </p></li>
+              </ul>  
+            </div>
+            <div class="col-md-3">   
+            </div>
+          </div>
+      </div> 
+        <div class="col-md-12">
+          <div class="footer push">
+            <footer class="footer text-center">
+              <div class="container">
+                <p><br>&copy; 2018 Amer Toukan</p>
+              </div>
+            </footer>
+          </div>
+        </div>
+        <script>
+        //Available choices
+    var possible = [
+        'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'
+    ];
+
+//Declaring variables and setting them to 0
+var wins = 0;
+var losses = 0;
+var guesses = 9;
+var guessesLeft = 10;
+var guessedLetters = [];
+var letterToGuess = null;
+//Select a random letter from the available choices (a-z)
+var computerGuess = possible[Math.floor(Math.random() * possible.length)];
+//Allow user to guess 9 times
+var updateGuessesLeft = function() {
+  document.querySelector("#guessLeft").innerHTML = "Guesses left: " + guessesLeft;
+};
+var updateLetterToGuess = function() {
+  this.letterToGuess = this.possible[Math.floor(Math.random() * this.possible.length)];
+};
+var updateGuesses = function() {
+  // display guesses user tried as letters with seperator. 
+  document.querySelector('#yourGuesses').innerHTML = "Your Guesses: " + guessedLetters.join(', ');
+};
+//reset function
+var reset = function() {
+  totalGuesses = 9;
+  guessesLeft = 9;
+  guessedLetters = [];
+
+  updateLetterToGuess();
+  updateGuessesLeft();
+  updateGuessesSoFar();
+}
+
+updateLetterToGuess();
+updateGuessesLeft();
+
+
+//Listen to users keyboard for when they release button and subtract guesses left 
+document.onkeyup = function(event) {
+    guessesLeft--;
+  var userGuess = String.fromCharCode(event.keyCode).toLowerCase();
+//push users guess to the guessedLetters array 
+  guessedLetters.push(userGuess);
+  //update Guesses left function
+  updateGuessesLeft();
+  //updates guesses user made so far 
+  updateGuesses();
+//if user guess before guesses left goes to zero, theyre win increases by one 
+        if (guessesLeft > 0){
+            if (userGuess == letterToGuess){
+                wins++;
+                document.querySelector('#win').innerHTML = "Win: " + wins;
+                alert("You are psychic!!");
+                //call reset
+                reset();
+            }
+        }else if(guessesLeft == 0){
+            // user will lose and losses will be increased by 1  
+            losses++;
+            document.querySelector('#loss').innerHTML = "Loss: " + losses;
+            alert("Game over, try again");
+            // call reset 
+            reset();
+        }
+};
+
+
+    </script>
+</body>
+</html>
